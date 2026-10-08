@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Shravan | Memories in the VC</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Rozha+One&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        discord: {
+                            bg: '#1e1f22',
+                            sidebar: '#2b2d31',
+                            card: '#313338',
+                            active: '#35373c',
+                            blurple: '#5865f2',
+                            green: '#23a55a',
+                            red: '#f23f43',
+                            yellow: '#f0b232',
+                            textMuted: '#949ba4'
+                        },
+                        melancholy: {
+                            purple: '#2c1e4a',
+                            glow: '#8b5cf6',
+                            rose: '#f43f5e',
+                            dark: '#0f0c1b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        poetry: ['Rozha One', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0b0a12;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Ambient animated background grid */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(30, 27, 46, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-interactive {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-panel-interactive:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Rain Canvas container */
+        #rain-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+        }
+
+        /* Glowing text effect */
+        .glow-text {
+            text-shadow: 0 0 15px rgba(139, 92, 246, 0.5), 0 0 30px rgba(244, 63, 94, 0.3);
+        }
+
+        /* Pulse animation for active voice indicator */
+        @keyframes customPulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.98); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+        .vc-pulse {
+            animation: customPulse 3s infinite ease-in-out;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0a12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2b2d31;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5865f2;
+        }
+    </style>
+</head>
+<body class="bg-grid-pattern min-h-screen relative font-sans flex flex-col justify-between">
+
+    <!-- Rain canvas background -->
+    <canvas id="rain-canvas"></canvas>
+
+    <!-- Main Container -->
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <header class="flex flex-col md:flex-row justify-between items-center mb-12 gap-4 pb-6 border-b border-white/10">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-rose-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-purple-500/30">
+                    S
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        For Shravan <span class="text-xs font-normal px-2.5 py-0.5 rounded-full bg-purple-900/60 text-purple-300 border border-purple-500/30">Unspoken Words</span>
+                    </h1>
+                    <p class="text-xs text-discord-textMuted">Late Night Echoes in an Empty VC</p>
+                </div>
+            </div>
+
+            <!-- Discord Status Badge Header -->
+            <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-3 text-xs">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
+                <span class="text-gray-300">Status: <strong class="text-rose-400 font-medium">Left VC (Busy Elsewhere)</strong></span>
+            </div>
+        </header>
+
+        <section class="mb-16 text-center md:text-left grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div class="md:col-span-7 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-medium">
+                    <i class="fa-solid font-sm fa-headset text-purple-400"></i>
+                    <span>Voice Channel - General Memory #01</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                    Remember when the <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-rose-400 to-amber-300 glow-text">VC never went quiet?</span>
+                </h2>
+                <p class="text-gray-400 text-base leading-relaxed max-w-2xl">
+                    Hey Shravan, we used to chill in VC for hours till 3 AM—gaming, roasting each other, and sharing random life stuff. Now someone new came along, and the room sits completely empty. I made this small page just to drop some thoughts that I usually keep to myself.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
+                    <a href="#shayari-section" class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium hover:opacity-90 transition shadow-lg shadow-purple-600/25 flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-heart"></i> Read Shayaris
+                    </a>
+                    <a href="#vc-simulator" class="px-6 py-3 rounded-xl glass-panel text-gray-200 font-medium hover:bg-white/10 transition flex items-center gap-2 text-sm border border-white/10">
+                        <i class="fa-brands fa-discord text-discord-blurple"></i> Open Discord VC
+                    </a>
+                </div>
+            </div>
+
+            <!-- Visual Hero Card - Empty VC Card -->
+            <div class="md:col-span-5">
+                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden border border-white/10 shadow-2xl">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-600/20 rounded-full blur-3xl"></div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-2 text-xs text-discord-textMuted uppercase font-semibold tracking-wider">
+                            <i class="fa-solid fa-volume-high text-discord-green"></i> Voice Connected
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded bg-black/40 text-gray-400">RTC Connecting...</span>
+                    </div>
+
+                    <div class="bg-discord-bg/80 rounded-2xl p-4 border border-discord-card space-y-3 mb-6">
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-discord-sidebar/60">
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center font-bold text-gray-300">
+                                        ME
+                                    </div>
+                                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-discord-bg"></span>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold text-white">You</div>
+                                    <div class="text-xs text-gray-400">Muted & Waiting...</div>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-microphone-slash text-red-400 text-sm"></i>
+                        </div>
+
+                        <div class="flex items-center justify-between p-2 rounded-xl border border-dashed border-gray-700 bg-transparent opacity-60">
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <div class="w-10 h-10 rounded-full bg-rose-900/40 border border-rose-500/30 flex items-center justify-center font-bold text-rose-300">
+                                        SH
+                                    </div>
+                                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-gray-500 rounded-full border-2 border-discord-bg"></span>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold text-gray-300">Shravan</div>
+                                    <div class="text-xs text-rose-400">Disconnected 2 hours ago</div>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-500">Offline</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center bg-purple-950/30 p-3 rounded-xl border border-purple-500/20 text-xs text-purple-200 italic">
+                        "VC mein tera wait karta hoon, par tu ab kisi aur ke saath busy rehta hai..."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="shayari-section" class="mb-16">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div>
+                    <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-quote-left text-purple-400"></i> Hinglish Sad Shayaris
+                    </h3>
+                    <p class="text-discord-textMuted text-sm mt-1">Written from the heart about lost late-night chats and priorities.</p>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap gap-2" id="category-filters">
+                    <button data-category="all" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-purple-600 text-white transition">All</button>
+                    <button data-category="vc" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-medium glass-panel text-gray-300 hover:text-white transition">Late Night VC</button>
+                    <button data-category="distance" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-medium glass-panel text-gray-300 hover:text-white transition">Forgotten Friend</button>
+                    <button data-category="priorities" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-medium glass-panel text-gray-300 hover:text-white transition">Changed Priorities</button>
+                </div>
+            </div>
+
+            <!-- Shayari Feature Display Box -->
+            <div class="glass-panel p-8 rounded-3xl border border-white/10 relative shadow-2xl mb-6 min-h-[260px] flex flex-col justify-between">
+                <!-- Quote watermark icon -->
+                <i class="fa-solid fa-quote-right absolute bottom-6 right-8 text-8xl text-white/5 pointer-events-none"></i>
+                
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span id="shayari-tag" class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-semibold border border-purple-500/30">
+                            Late Night VC
+                        </span>
+                        <span id="shayari-index" class="text-xs text-gray-500 font-mono">1 / 6</span>
+                    </div>
+
+                    <!-- Shayari Body Text -->
+                    <div class="py-4">
+                        <p id="shayari-text" class="text-xl sm:text-2xl font-poetry text-gray-100 leading-relaxed tracking-wide italic">
+                            "VC mein screen share karke ghanto baatein karte the,<br>
+                            Aaj usi VC mein akela baith kar tera status dekhte hain..."
+                        </p>
+                        <p id="shayari-translation" class="text-xs sm:text-sm text-gray-400 mt-4 font-sans italic border-l-2 border-purple-500/40 pl-3">
+                            (We used to talk for hours sharing screens in VC, today I sit alone in that same VC checking your status...)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Actions Row -->
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-white/10 mt-4">
+                    <div class="flex items-center gap-3">
+                        <button id="like-btn" class="flex items-center gap-2 px-4 py-2 rounded-xl glass-panel text-rose-400 hover:bg-rose-500/10 transition border border-rose-500/20 active:scale-95">
+                            <i class="fa-regular fa-heart" id="like-icon"></i>
+                            <span id="like-count" class="text-xs font-bold">124</span>
+                        </button>
+
+                        <button id="copy-btn" class="flex items-center gap-2 px-4 py-2 rounded-xl glass-panel text-gray-300 hover:bg-white/10 transition border border-white/10 text-xs active:scale-95">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+
+                        <button id="share-btn" class="flex items-center gap-2 px-4 py-2 rounded-xl glass-panel text-gray-300 hover:bg-white/10 transition border border-white/10 text-xs active:scale-95">
+                            <i class="fa-solid fa-share-nodes"></i> Share
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button id="prev-btn" class="w-10 h-10 rounded-xl glass-panel text-gray-300 hover:text-white flex items-center justify-center transition border border-white/10 hover:bg-white/10">
+                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                        </button>
+                        <button id="next-btn" class="px-5 py-2.5 rounded-xl bg-purple-600 text-white font-medium text-xs hover:bg-purple-500 transition shadow-lg shadow-purple-600/30 flex items-center gap-2">
+                            Next Shayari <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vc-simulator" class="mb-16">
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-brands fa-discord text-discord-blurple"></i> Discord VC Interactive Memory Box
+                </h3>
+                <p class="text-discord-textMuted text-sm mt-1">Simulating the old times when Shravan used to join the Voice Channel.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Discord Server Sidebar Mockup -->
+                <div class="lg:col-span-4 bg-discord-sidebar p-4 rounded-2xl border border-white/5 space-y-4">
+                    <div class="flex items-center justify-between pb-3 border-b border-discord-card">
+                        <h4 class="font-bold text-white text-sm tracking-wide">SHRAVAN'S SERVER</h4>
+                        <i class="fa-solid fa-ellipsis text-discord-textMuted text-xs"></i>
+                    </div>
+
+                    <!-- Voice Channel Item -->
+                    <div class="space-y-1">
+                        <div class="text-xs font-semibold text-discord-textMuted uppercase tracking-wider px-2 py-1 flex justify-between items-center">
+                            <span>Voice Channels</span>
+                            <span class="text-[10px] bg-discord-card px-1.5 py-0.5 rounded">1/2</span>
+                        </div>
+
+                        <div id="vc-channel-btn" class="flex items-center justify-between px-3 py-2 rounded-lg bg-discord-active cursor-pointer transition border-l-2 border-discord-blurple">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-volume-high text-discord-green text-xs"></i>
+                                <span class="text-sm text-white font-medium">Late Night Hangout</span>
+                            </div>
+                            <span id="user-count-badge" class="text-xs bg-red-500/20 text-red-300 px-2 py-0.5 rounded-full font-mono">1 User</span>
+                        </div>
+                    </div>
+
+                    <!-- Voice Channel Active Users List -->
+                    <div id="vc-users-list" class="space-y-2 pl-4 pt-1">
+                        <!-- Me -->
+                        <div class="flex items-center justify-between py-1 px-2 rounded hover:bg-discord-card/50">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-[10px] text-white font-bold">ME</div>
+                                <span class="text-xs text-gray-200">You (Waiting)</span>
+                            </div>
+                            <i class="fa-solid fa-microphone-slash text-xs text-rose-500"></i>
+                        </div>
+
+                        <!-- Shravan Placeholder -->
+                        <div id="shravan-user-item" class="hidden flex items-center justify-between py-1 px-2 rounded hover:bg-discord-card/50 animate-pulse">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-[10px] text-white font-bold">SH</div>
+                                <span class="text-xs text-emerald-300 font-semibold">Shravan (Connected!)</span>
+                            </div>
+                            <i class="fa-solid fa-microphone text-xs text-emerald-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Ping Controls -->
+                    <div class="pt-4 border-t border-discord-card space-y-2">
+                        <button id="ping-shravan-btn" class="w-full py-2.5 px-4 rounded-xl bg-discord-blurple hover:bg-indigo-600 text-white text-xs font-semibold transition flex items-center justify-center gap-2 shadow">
+                            <i class="fa-solid fa-bell"></i> Send Discord Ping to Shravan
+                        </button>
+                        <button id="toggle-simulate-btn" class="w-full py-2 px-4 rounded-xl glass-panel hover:bg-white/5 text-gray-300 text-xs font-medium transition flex items-center justify-center gap-2 border border-white/10">
+                            <i class="fa-solid fa-ghost"></i> Simulate "Shravan Joined VC"
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Discord VC Visual Canvas / Simulator -->
+                <div class="lg:col-span-8 bg-discord-bg p-6 rounded-2xl border border-white/5 flex flex-col justify-between min-h-[300px]">
+                    <!-- VC Header -->
+                    <div class="flex justify-between items-center pb-4 border-b border-discord-card">
+                        <div class="flex items-center gap-3">
+                            <div id="vc-status-dot" class="w-3 h-3 rounded-full bg-rose-500"></div>
+                            <span id="vc-status-text" class="text-xs font-medium text-gray-300">Channel Status: <span class="text-rose-400">Shravan is in another channel with her...</span></span>
+                        </div>
+                        <div class="text-xs text-discord-textMuted flex items-center gap-2">
+                            <i class="fa-solid fa-wifi text-emerald-400"></i> 18ms
+                        </div>
+                    </div>
+
+                    <!-- Avatars Display Area -->
+                    <div class="py-10 flex flex-wrap justify-center items-center gap-8" id="vc-avatar-area">
+                        <!-- My Avatar Box -->
+                        <div class="text-center group">
+                            <div class="relative inline-block mb-3">
+                                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-purple-700 to-indigo-500 flex items-center justify-center text-2xl font-bold text-white shadow-xl ring-2 ring-purple-500/50">
+                                    YOU
+                                </div>
+                                <span class="absolute bottom-1 right-1 w-5 h-5 bg-discord-card rounded-full flex items-center justify-center border border-gray-600 text-rose-400 text-xs">
+                                    <i class="fa-solid fa-microphone-slash text-[10px]"></i>
+                                </span>
+                            </div>
+                            <div class="text-xs font-semibold text-gray-200">Waiting for Shravan</div>
+                            <div class="text-[10px] text-discord-textMuted">Connected</div>
+                        </div>
+
+                        <!-- Divider / Versus Icon -->
+                        <div class="text-discord-textMuted text-sm font-mono flex flex-col items-center">
+                            <i class="fa-solid fa-arrows-left-right text-gray-600 mb-1"></i>
+                            <span class="text-[10px] opacity-40">VC LINK</span>
+                        </div>
+
+                        <!-- Shravan Avatar Box -->
+                        <div id="shravan-vc-box" class="text-center opacity-40 transition-all duration-500 scale-95">
+                            <div class="relative inline-block mb-3">
+                                <div id="shravan-avatar-ring" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center text-2xl font-bold text-gray-500 shadow-xl border-2 border-dashed border-gray-600">
+                                    SH
+                                </div>
+                                <span id="shravan-mic-badge" class="absolute bottom-1 right-1 w-5 h-5 bg-discord-card rounded-full flex items-center justify-center border border-gray-600 text-gray-500 text-xs">
+                                    <i class="fa-solid fa-plug-circle-xmark text-[10px]"></i>
+                                </span>
+                            </div>
+                            <div id="shravan-status-name" class="text-xs font-semibold text-gray-400">Shravan (Offline)</div>
+                            <div id="shravan-subtext" class="text-[10px] text-rose-400">Left VC 10m ago</div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Notification Console -->
+                    <div id="discord-console-log" class="bg-black/40 rounded-xl p-3 border border-white/5 font-mono text-xs text-discord-textMuted flex items-center justify-between">
+                        <span id="console-msg" class="truncate"><i class="fa-solid fa-info-circle text-purple-400 mr-2"></i> System: Shravan left the VC to join a private room.</span>
+                        <span class="text-[10px] text-gray-600">NOW</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-rose-400"></i> Drop a Message for Shravan
+                </h3>
+                <p class="text-discord-textMuted text-sm mt-1">Post a heartfelt note or memory on the public board for him to read later.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Message Input Form -->
+                <div class="md:col-span-5 glass-panel p-6 rounded-2xl border border-white/10 self-start">
+                    <form id="message-form" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Your Name / Alias</label>
+                            <input type="text" id="sender-name" placeholder="e.g. Your Old VC Buddy" required class="w-full bg-discord-bg/80 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Message for Shravan</label>
+                            <textarea id="sender-msg" rows="4" placeholder="Bro, missing our late night Valo & VC sessions..." required class="w-full bg-discord-bg/80 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-rose-600 text-white font-medium text-xs hover:opacity-90 transition shadow-lg shadow-purple-600/20 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Post Message on Wall
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Messages Wall Display -->
+                <div class="md:col-span-7">
+                    <div id="messages-wall" class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                        <!-- Default Message 1 -->
+                        <div class="glass-panel p-4 rounded-2xl border border-white/10">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-purple-300">VC Partner</span>
+                                <span class="text-[10px] text-gray-500 font-mono">Today at 02:14 AM</span>
+                            </div>
+                            <p class="text-sm text-gray-300 italic">"Shravan bhai, bandi mil gayi toh humko hi bhool gaya? PEhle VC se kabhie offline nahi hota tha..."</p>
+                        </div>
+
+                        <!-- Default Message 2 -->
+                        <div class="glass-panel p-4 rounded-2xl border border-white/10">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-rose-300">Server Owner</span>
+                                <span class="text-[10px] text-gray-500 font-mono">Yesterday at 11:45 PM</span>
+                            </div>
+                            <p class="text-sm text-gray-300 italic">"Jab bhi VC me aao, ping kar dena. Late night squad misses you!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="fixed bottom-5 right-5 z-50">
+        <div id="lofi-player" class="glass-panel p-3 rounded-2xl border border-white/15 shadow-2xl flex items-center gap-3 transition-all duration-300">
+            <div class="w-10 h-10 rounded-xl bg-purple-900/60 border border-purple-500/30 flex items-center justify-center text-purple-300">
+                <i class="fa-solid fa-cloud-rain animate-pulse" id="audio-icon"></i>
+            </div>
+            <div class="hidden sm:block text-left pr-2">
+                <div class="text-xs font-bold text-white">Rainy Ambient Vibe</div>
+                <div class="text-[10px] text-discord-textMuted" id="audio-status">Click play for lofi atmosphere</div>
+            </div>
+            <button id="play-audio-btn" class="w-9 h-9 rounded-xl bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center text-xs shadow-lg transition active:scale-95">
+                <i class="fa-solid fa-play" id="play-icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification Popup -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-100px] opacity-0 transition-all duration-300 glass-panel px-4 py-3 rounded-xl border border-purple-500/40 text-xs text-white shadow-2xl flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-msg">Notification Message</span>
+    </div>
+
+    <footer class="relative z-10 border-t border-white/10 py-6 bg-black/40 text-center text-xs text-discord-textMuted">
+        <div class="max-w-6xl mx-auto px-4">
+            <p>Made with sincere friendship for <span class="text-purple-300 font-semibold">Shravan</span> • Hope to see you back in VC soon.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- SHAYARI DATA BANK (Hinglish) ---
+        const shayaris = [
+            {
+                id: 1,
+                tag: "Late Night VC",
+                text: "VC mein screen share karke ghanto baatein karte the,<br>Aaj usi VC mein akela baith kar tera status dekhte hain...",
+                translation: "(We used to talk for hours sharing screens in VC, today I sit alone in that same VC checking your status...)",
+                category: "vc",
+                likes: 142
+            },
+            {
+                id: 2,
+                tag: "Forgotten Friend",
+                text: "Wo jab aayi toh tu humein aise bhool gaya Shravan,<br>Jaise humari dosti ka koi wajood hi nahi tha...",
+                translation: "(When she came, you forgot us as if our friendship had no existence at all...)",
+                category: "distance",
+                likes: 98
+            },
+            {
+                id: 3,
+                tag: "Changed Priorities",
+                text: "Pehle ek call par Discord par aa jata tha,<br>Ab ek text ka reply bhi ghanto baad aata hai...",
+                translation: "(Earlier you joined Discord on a single call, now even a text reply comes after hours...)",
+                category: "priorities",
+                likes: 185
+            },
+            {
+                id: 4,
+                tag: "Late Night VC",
+                text: "Khali pada hai Discord ka wo voice room aaj bhi,<br>Jahan kabhi humare roasts aur hassi ki aawaaz goonjti thi...",
+                translation: "(That Discord voice room sits empty even today, where our roasts and laughter used to echo...)",
+                category: "vc",
+                likes: 110
+            },
+            {
+                id: 5,
+                tag: "Forgotten Friend",
+                text: "Dost naye bane toh purane ko side kar diya,<br>Bandi ke aate hi tune VC ka rasta hi badal diya...",
+                translation: "(When you made a new connection, you set the old friend aside; as soon as she arrived, you changed your path...)",
+                category: "priorities",
+                likes: 215
+            },
+            {
+                id: 6,
+                tag: "Changed Priorities",
+                text: "Shravan bhai, dosti me koi competition nahi tha,<br>Par tune toh ek hi pal me paraya kar diya...",
+                translation: "(Brother Shravan, there was no competition in our friendship, but you made us strangers in an instant...)",
+                category: "distance",
+                likes: 167
+            }
+        ];
+
+        let currentShayariIndex = 0;
+        let filteredShayaris = [...shayaris];
+
+        // --- DOM Elements ---
+        const shayariTag = document.getElementById('shayari-tag');
+        const shayariText = document.getElementById('shayari-text');
+        const shayariTranslation = document.getElementById('shayari-translation');
+        const shayariIndex = document.getElementById('shayari-index');
+        const likeCount = document.getElementById('like-count');
+        const likeIcon = document.getElementById('like-icon');
+
+        // --- Render Shayari Function ---
+        function renderShayari(index) {
+            const item = filteredShayaris[index];
+            if (!item) return;
+
+            shayariTag.textContent = item.tag;
+            shayariText.innerHTML = `"${item.text}"`;
+            shayariTranslation.textContent = item.translation;
+            shayariIndex.textContent = `${index + 1} / ${filteredShayaris.length}`;
+            likeCount.textContent = item.likes;
+            
+            // Reset like state icon
+            likeIcon.className = 'fa-regular fa-heart';
+        }
+
+        // --- Navigation Controls ---
+        document.getElementById('next-btn').addEventListener('click', () => {
+            currentShayariIndex = (currentShayariIndex + 1) % filteredShayaris.length;
+            renderShayari(currentShayariIndex);
+        });
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            currentShayariIndex = (currentShayariIndex - 1 + filteredShayaris.length) % filteredShayaris.length;
+            renderShayari(currentShayariIndex);
+        });
+
+        // --- Like Feature ---
+        let likedMap = {};
+        document.getElementById('like-btn').addEventListener('click', () => {
+            const item = filteredShayaris[currentShayariIndex];
+            if (!likedMap[item.id]) {
+                item.likes++;
+                likedMap[item.id] = true;
+                likeIcon.className = 'fa-solid fa-heart text-rose-500 animate-bounce';
+                showToast('Hearted this Shayari!');
+            } else {
+                item.likes--;
+                likedMap[item.id] = false;
+                likeIcon.className = 'fa-regular fa-heart';
+            }
+            likeCount.textContent = item.likes;
+        });
+
+        // --- Copy Shayari ---
+        document.getElementById('copy-btn').addEventListener('click', () => {
+            const item = filteredShayaris[currentShayariIndex];
+            const cleanText = item.text.replace(/<br\s*[\/]?>/gi, "\n");
+            const fullText = `${cleanText}\n\n- Dedicated to Shravan`;
+            
+            // Clipboard copy fallback
+            const tempInput = document.createElement("textarea");
+            tempInput.value = fullText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast('Copied Shayari to Clipboard!');
+        });
+
+        // --- Share Shayari ---
+        document.getElementById('share-btn').addEventListener('click', () => {
+            if (navigator.share) {
+                const item = filteredShayaris[currentShayariIndex];
+                navigator.share({
+                    title: 'Shayari for Shravan',
+                    text: item.text.replace(/<br\s*[\/]?>/gi, " "),
+                    url: window.location.href
+                }).catch(() => {});
+            } else {
+                showToast('Link copied to share!');
+            }
+        });
+
+        // --- Category Filters ---
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-purple-600', 'text-white');
+                    b.classList.add('glass-panel', 'text-gray-300');
+                });
+
+                e.target.classList.remove('glass-panel', 'text-gray-300');
+                e.target.classList.add('bg-purple-600', 'text-white');
+
+                const cat = e.target.getAttribute('data-category');
+                if (cat === 'all') {
+                    filteredShayaris = [...shayaris];
+                } else {
+                    filteredShayaris = shayaris.filter(s => s.category === cat);
+                }
+                currentShayariIndex = 0;
+                renderShayari(currentShayariIndex);
+            });
+        });
+
+        // --- Discord Simulator Interactions ---
+        let shravanInVC = false;
+
+        const pingBtn = document.getElementById('ping-shravan-btn');
+        const toggleSimulateBtn = document.getElementById('toggle-simulate-btn');
+        const consoleMsg = document.getElementById('console-msg');
+        const shravanVcBox = document.getElementById('shravan-vc-box');
+        const shravanUserItem = document.getElementById('shravan-user-item');
+        const userCountBadge = document.getElementById('user-count-badge');
+        const vcStatusDot = document.getElementById('vc-status-dot');
+        const vcStatusText = document.getElementById('vc-status-text');
+
+        pingBtn.addEventListener('click', () => {
+            showToast('Pinged @Shravan on Discord!');
+            consoleMsg.innerHTML = `<i class="fa-solid fa-paper-plane text-purple-400 mr-2"></i> System: You pinged @Shravan ("Bro join VC when free!"). No answer yet.`;
+        });
+
+        toggleSimulateBtn.addEventListener('click', () => {
+            shravanInVC = !shravanInVC;
+            if (shravanInVC) {
+                // Shravan Joins VC
+                shravanVcBox.classList.remove('opacity-40', 'scale-95');
+                shravanVcBox.classList.add('opacity-100', 'scale-100');
+                
+                document.getElementById('shravan-avatar-ring').className = 'w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-emerald-600 flex items-center justify-center text-2xl font-bold text-white shadow-xl ring-4 ring-emerald-500/50 animate-pulse';
+                document.getElementById('shravan-mic-badge').className = 'absolute bottom-1 right-1 w-5 h-5 bg-discord-card rounded-full flex items-center justify-center border border-gray-600 text-emerald-400 text-xs';
+                document.getElementById('shravan-mic-badge').innerHTML = '<i class="fa-solid fa-microphone text-[10px]"></i>';
+                document.getElementById('shravan-status-name').textContent = 'Shravan';
+                document.getElementById('shravan-status-name').className = 'text-xs font-bold text-emerald-400';
+                document.getElementById('shravan-subtext').textContent = 'Speaking...';
+                
+                shravanUserItem.classList.remove('hidden');
+                userCountBadge.textContent = '2 Users';
+                userCountBadge.className = 'text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-mono';
+
+                vcStatusDot.className = 'w-3 h-3 rounded-full bg-emerald-500 animate-ping';
+                vcStatusText.innerHTML = 'Channel Status: <span class="text-emerald-400 font-bold">Shravan is connected to late night VC!</span>';
+
+                consoleMsg.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 mr-2"></i> Discord: Shravan joined "Late Night Hangout".`;
+                toggleSimulateBtn.innerHTML = `<i class="fa-solid fa-door-open"></i> Simulate "Shravan Left VC"`;
+                showToast('Shravan connected to VC!');
+            } else {
+                // Shravan Leaves VC
+                shravanVcBox.classList.add('opacity-40', 'scale-95');
+                shravanVcBox.classList.remove('opacity-100', 'scale-100');
+
+                document.getElementById('shravan-avatar-ring').className = 'w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center text-2xl font-bold text-gray-500 shadow-xl border-2 border-dashed border-gray-600';
+                document.getElementById('shravan-mic-badge').className = 'absolute bottom-1 right-1 w-5 h-5 bg-discord-card rounded-full flex items-center justify-center border border-gray-600 text-gray-500 text-xs';
+                document.getElementById('shravan-mic-badge').innerHTML = '<i class="fa-solid fa-plug-circle-xmark text-[10px]"></i>';
+                document.getElementById('shravan-status-name').textContent = 'Shravan (Offline)';
+                document.getElementById('shravan-status-name').className = 'text-xs font-semibold text-gray-400';
+                document.getElementById('shravan-subtext').textContent = 'Left VC 1m ago';
+
+                shravanUserItem.classList.add('hidden');
+                userCountBadge.textContent = '1 User';
+                userCountBadge.className = 'text-xs bg-red-500/20 text-red-300 px-2 py-0.5 rounded-full font-mono';
+
+                vcStatusDot.className = 'w-3 h-3 rounded-full bg-rose-500';
+                vcStatusText.innerHTML = 'Channel Status: <span class="text-rose-400">Shravan left the VC again...</span>';
+
+                consoleMsg.innerHTML = `<i class="fa-solid fa-right-from-bracket text-rose-400 mr-2"></i> Discord: Shravan left the channel.`;
+                toggleSimulateBtn.innerHTML = `<i class="fa-solid fa-ghost"></i> Simulate "Shravan Joined VC"`;
+                showToast('Shravan left VC.');
+            }
+        });
+
+        // --- Message Board Posting ---
+        const messageForm = document.getElementById('message-form');
+        const messagesWall = document.getElementById('messages-wall');
+
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('sender-name').value.trim();
+            const msg = document.getElementById('sender-msg').value.trim();
+
+            if (!name || !msg) return;
+
+            const card = document.createElement('div');
+            card.className = 'glass-panel p-4 rounded-2xl border border-purple-500/30 animate-fade-in';
+            card.innerHTML = `
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-purple-300">${escapeHtml(name)}</span>
+                    <span class="text-[10px] text-gray-500 font-mono">Just Now</span>
+                </div>
+                <p class="text-sm text-gray-200 italic">"${escapeHtml(msg)}"</p>
+            `;
+
+            messagesWall.prepend(card);
+            messageForm.reset();
+            showToast('Your message has been posted for Shravan!');
+        });
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // --- Toast System ---
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.textContent = message;
+            toast.classList.remove('translate-y-[-100px]', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-[-100px]', 'opacity-0');
+            }, 3000);
+        }
+
+        // --- Ambient Synthesizer Audio (Tone.js style Web Audio Rain Synth) ---
+        let audioCtx = null;
+        let isPlayingAudio = false;
+        let noiseNode = null;
+
+        document.getElementById('play-audio-btn').addEventListener('click', () => {
+            if (!isPlayingAudio) {
+                startRainAmbient();
+            } else {
+                stopRainAmbient();
+            }
+        });
+
+        function startRainAmbient() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                // Create White Noise buffer for rain
+                const bufferSize = audioCtx.sampleRate * 2;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+
+                noiseNode = audioCtx.createBufferSource();
+                noiseNode.buffer = buffer;
+                noiseNode.loop = true;
+
+                // Filter for rain sound effect
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+
+                noiseNode.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                noiseNode.start();
+                isPlayingAudio = true;
+
+                document.getElementById('play-icon').className = 'fa-solid fa-pause';
+                document.getElementById('audio-status').textContent = 'Playing ambient rain atmosphere';
+                document.getElementById('audio-icon').className = 'fa-solid fa-cloud-showers-heavy text-purple-400 animate-pulse';
+                showToast('Rain ambient audio playing...');
+            } catch (e) {
+                showToast('Audio feature not supported.');
+            }
+        }
+
+        function stopRainAmbient() {
+            if (noiseNode) {
+                noiseNode.stop();
+                isPlayingAudio = false;
+                document.getElementById('play-icon').className = 'fa-solid fa-play';
+                document.getElementById('audio-status').textContent = 'Click play for lofi atmosphere';
+                document.getElementById('audio-icon').className = 'fa-solid fa-cloud-rain';
+                showToast('Audio paused.');
+            }
+        }
+
+        // --- Rain Animation Canvas ---
+        const canvas = document.getElementById('rain-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const drops = [];
+        const dropCount = 90;
+
+        for (let i = 0; i < dropCount; i++) {
+            drops.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                length: Math.random() * 20 + 10,
+                speed: Math.random() * 5 + 4,
+                opacity: Math.random() * 0.3 + 0.1
+            });
+        }
+
+        function animateRain() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(139, 92, 246, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.lineCap = 'round';
+
+            drops.forEach(drop => {
+                ctx.beginPath();
+                ctx.moveTo(drop.x, drop.y);
+                ctx.lineTo(drop.x, drop.y + drop.length);
+                ctx.stroke();
+
+                drop.y += drop.speed;
+                if (drop.y > canvas.height) {
+                    drop.y = -drop.length;
+                    drop.x = Math.random() * canvas.width;
+                }
+            });
+
+            requestAnimationFrame(animateRain);
+        }
+
+        // --- Initialize Page ---
+        window.onload = function() {
+            renderShayari(0);
+            animateRain();
+        };
+    </script>
+</body>
+</html>
